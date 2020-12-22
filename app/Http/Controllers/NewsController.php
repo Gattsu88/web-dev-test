@@ -3,10 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostFormRequest;
+use App\Http\Requests\CommentFormRequest;
 use App\Models\News;
+use App\Models\Comment;
 
 class NewsController extends Controller
 {
+    public function comment(CommentFormRequest $request, $id)
+    {
+        $news = News::findOrFail($id);
+        $news->comments()->save(new Comment([
+            'name' => $request->name,
+            'email' => $request->email,
+            'text' => $request->text
+        ]));
+
+        return redirect()->route('comment.show', ['id' => $id]);
+    }
+
     public function index()
     {
         $news = News::latest()->paginate(10);

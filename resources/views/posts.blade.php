@@ -19,7 +19,7 @@
                     <div class="mt-3">
                         <a href="{{ route('post.show', $post->id) }}" class="text-base font-semibold text-indigo-600 hover:text-indigo-500">
                             Read full story
-                        </a>
+                        </a><small class="float-right mr-4">@if($post->allApprovedComments->count() == 1) 1 Comment @else {{ $post->allApprovedComments->count() }} Comments @endif</small>
                     </div>
                 </div>
                 @empty

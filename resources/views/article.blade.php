@@ -37,8 +37,43 @@
             </div>
             <div class="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
                 <p>{!! nl2br(e($article->content)) !!}</p>
+                <div class="row">
+                    <div class="col-md-12 col-lg-12">
+
+                        <h4>Leave your comment..</h4>
+                        <form action="{{ route('news.comment.store', $article->id) }}" method="post" data-parsley-validate autocomplete="off">
+                            @csrf
+                            <x-honeypot />
+
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" name="name" id="name" placeholder="Enter your name.." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email.." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="text">Description:</label>
+                                <textarea rows="5" class="form-control" name="text" id="text" placeholder="Enter your comment.." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" name="article_id" value="{{ $article->id }}" id="article_id">
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-info float-right" value="Create Comment">
+                            </div>
+                        </form><br><hr>
+
+                        <h3>All Comments ({{ $article->allApprovedComments->count() }})</h3>
+                        @if($article->allApprovedComments->count() > 0)
+                            @include('news_replies', ['comments' => $article->parentApprovedComments, 'article_id' => $article->id])
+                        @else
+                            <h4>No comments for this article.</h4>
+                        @endif
+                    </div>
+                </div><hr>
             </div>
         </div>
     </div>
-
 </x-guest-layout>
